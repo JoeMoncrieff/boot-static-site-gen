@@ -108,5 +108,8 @@ def text_to_textnodes(text):
     nodes = split_nodes_delimiter(nodes,"**", "bold")
     nodes = split_nodes_delimiter(nodes,"*", "italic")
     nodes = split_nodes_delimiter(nodes,"`", "code")
- 
+
     return nodes
+
+
+
