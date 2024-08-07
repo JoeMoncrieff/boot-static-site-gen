@@ -2,6 +2,13 @@ import re
 from html_node import HTMLNode, LeafNode, ParentNode
 from utils import text_to_textnodes, text_node_to_html_node
 
+def extract_title(markdown):
+    for line in markdown.split("\n"):
+        if re.match(r"(?<!#)# .+",line):
+            return line[2:].strip()
+    raise Exception("No title")
+
+
 def markdown_to_blocks(markdown):
     output = []
     for block in re.findall(r"(.+((\n).+)*)",markdown):      
@@ -59,7 +66,7 @@ def markdown_to_html_node(markdown):
             
             case "code":
                 #take away the back ticks
-                children = list(map(text_node_to_html_node, text_to_textnodes(block[3:-3])))
+                children = list(map(text_node_to_html_node, text_to_textnodes(block[3:-3].lstrip())))
                 node = ParentNode(tag="code", children=children)
                 node = ParentNode(tag="pre", children=[node])
                 big_children.append(node)
@@ -76,7 +83,7 @@ def markdown_to_html_node(markdown):
 
             case "quote":
                 #take away quote pointer from each line
-                block = "\n".join(x[1:] for x in block.split("\n"))
+                block = "\n".join(x[1:].lstrip() for x in block.split("\n"))
                 children = list(map(text_node_to_html_node, text_to_textnodes(block)))
                 node = ParentNode(tag="blockquote", children=children)
                 big_children.append(node)

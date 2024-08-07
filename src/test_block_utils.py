@@ -1,7 +1,8 @@
 import unittest
 from block_utils import ( markdown_to_blocks,
-                         block_to_block_type,
-                          markdown_to_html_node )
+                          block_to_block_type,
+                          markdown_to_html_node,
+                          extract_title )
 
 class TestBlockUtils(unittest.TestCase):
 
@@ -57,6 +58,12 @@ class TestBlockUtils(unittest.TestCase):
         
         txt1 = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n\n\n\n\n\n\n\n\n"
         #print(markdown_to_html_node(txt).to_html())
+
+    def test_extract_title(self):
+        self.assertEqual("Hello", extract_title("# Hello"))
+        with self.assertRaises(Exception) as context:
+            extract_title("Howdy")
+        self.assertEqual(str(context.exception), "No title")
 
 if __name__ == "__main__":
     unittest.main()
